@@ -133,6 +133,12 @@ class LayoutParserDetectron2ModelHandler(PathHandler):
             model_url = CONFIG_CATALOG[dataset_name]["/".join(model_name)]
         else:
             raise ValueError(f"Unknown data_type {data_type}")
+
+        #get rid of the "?dl=1" suffix bc its needed by dropbox to force download,
+        #but not needed in model name.
+        if "?dl=1" in model_url:
+            model_url = model_url.split("?dl=1")[0]
+
         return PathManager.get_local_path(model_url, **kwargs)
 
     def _open(self, path, mode="r", **kwargs):
